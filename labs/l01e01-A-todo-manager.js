@@ -7,14 +7,16 @@ function Task(desc, urge, pri, deadline) {
     this.privacy = pri;
     this.deadline = deadline;
     //Task Methods
-    this.printOut = () => {console.log(`${this.description} ${this.urgency} ${this.privacy} ${this.deadline}`);}
+    this.printOut = () => {console.log(`[D]: ${this.description} [U]: ${this.urgency} [P]: ${this.privacy} [D]: ${this.deadline}`);}
   }
 
   let tasks = [];
   let i = 0;
 
-  do{
-    console.log("1. Insert a new task;");
+  const id = setInterval(
+    function(){
+      console.log("\n ***TASK MANAGER***\n");
+      console.log("1. Insert a new task;");
     //console.log("2. Remove a  task;");
     console.log("2.1. Remove a  task given a description;");
     console.log("2.2 Remove a  task given a date;");
@@ -24,10 +26,21 @@ function Task(desc, urge, pri, deadline) {
     var choise = readlineSync.question('Enter your choise: ');
     //operations
     if(choise == 1){
-        let value1 = readlineSync.question('Enter description: ');
-        let value2 = readlineSync.question('Enter urgency: ');
-        let value3 = readlineSync.question('Enter privacy: ');
+      let now = new Date();
+        //console.log(now); 
+        let value1 = readlineSync.question('\nEnter description: ');
+        let value2 = readlineSync.question('Enter urgency: ') || "not urgent";
+        let value3 = readlineSync.question('Enter privacy: ') || "private";
         let value4 = new Date(readlineSync.question('Enter deadline: '));
+        
+      //automatically delete a task when it expires
+      //(missing development of date without time ...)
+       setTimeout( function() {
+              for (let j=0; j< tasks.length;j++){
+                if(tasks[j] && tasks[j].deadline.getTime() <= new Date().getTime())
+                    delete tasks[j];
+              }
+            }, value4.getTime()-now.getTime()); 
         tasks[i++] = new Task(value1, value2, value3, value4);
     }else if(choise == 21){
       let value5 = readlineSync.question('Enter description of task to delete: ');
@@ -37,6 +50,7 @@ function Task(desc, urge, pri, deadline) {
         }
       } 
     }else if(choise == 22){
+      //modify and delete all tasks with a given deadline
       let value6 = new Date(readlineSync.question('Enter deadline of task to delete: '));
       for (let j=0; j< tasks.length;j++){
         if(tasks[j].deadline && tasks[j].deadline.getTime() == value6.getTime()){
@@ -44,7 +58,7 @@ function Task(desc, urge, pri, deadline) {
         }
       }
     }else if(choise == 3){
-      console.log("List of tasks: ");
+      console.log("\nList of tasks: ");
       tasks.sort((a, b) => {
         if(a.description < b.description) return -1;
         if(a.description > b.description) return 1;
@@ -55,8 +69,12 @@ function Task(desc, urge, pri, deadline) {
           tasks[j].printOut();
         }
       }
+    }else if(choise == 4){
+      clearInterval(id);
     }
-  }while(choise != 4);
+    }, 1000)
+
+    
 
 
 
