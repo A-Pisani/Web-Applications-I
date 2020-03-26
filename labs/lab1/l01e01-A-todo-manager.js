@@ -18,8 +18,8 @@ function Task(desc, urge, pri, deadline) {
       console.log("\n ***TASK MANAGER***\n");
       console.log("1. Insert a new task;");
     //console.log("2. Remove a  task;");
-    console.log("2.1. Remove a  task given a description;");
-    console.log("2.2 Remove a  task given a date;");
+    console.log("21. Remove a  task given a description;");
+    console.log("22. Remove a  task given a date;");
     console.log("3. Show all existing tasks, in alphabetic order;");
     console.log("4. Close the program.");
     var readlineSync = require('readline-sync');
